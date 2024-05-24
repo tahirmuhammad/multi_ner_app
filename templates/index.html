@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Token Classification</title>
+    <title>Multilingual NER</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,32 +53,127 @@
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+		.examples{
+			margin-top: 20px;
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+		}
+		.footer {
+			position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background: #f1f1f1;
+		}
+		 table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1px 0;
+            font-size: 16px;
+            min-width: 400px;
+        }
+        table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+        table th, table td {
+            padding: 12px 15px;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+		.urdub1 {
+			background-color:  #c719c4;
+			width: 40%;
+		}
+		.punjabib2 {
+			background-color:  #50c719;
+			width: 60%;
+		}
+		.hindib3 {
+			background-color:  #df3813;
+			width: 80%;
+		}
+		.styled-h3 {
+            font-family: 'Arial', sans-serif;
+            font-size: 1.5em;
+            color: #333;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 1px;
+            padding: 5px;
+            background: linear-gradient(to right, #009879, #33b2a6);
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+		.simple-h1 {
+			font-family: 'Arial', sans-serif;
+			font-size: 1.5em; /* Adjust the size as needed */
+			color: #333;
+			text-align: center;
+			margin: 20px 0;
+			padding: 10px;
+			background-color: #f4f4f9;
+			border: 2px solid #009879;
+			border-radius: 5px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+
     </style>
+	
 </head>
 <body>
     <div class="container">
-        <h1>Token Classification</h1>
+        <h1 class="simple-h1"> Multilingual NER Recognizer  </h1>
         <textarea id="inputText" placeholder="Enter text here..."></textarea>
-        <button onclick="classifyText()">Classify</button>
-        <div class="result" id="result">
-            <h2>Results:</h2>
+        <br>
+        <div class="examples" id="ex">
+			
+			<button onclick="urdutextf()" class="urdub1"> Sample Urdu Sentence</button>   <p id="urdutext" hidden="true">اسلام آباد: وزیراعظم شہباز شریف نے خصوصی سرمایہ کاری سہولت کونسل (ایس آئی ایف سی)  کی اپیکس کمیٹی کا اجلاس  ہفتہ (25 مئی) کو طلب کرلیا تاہم اجلاس میں وزیراعلیٰ خیبرپختونخوا (کے پی) علی امین گنڈاپور کو مدعو نہیں کیا گیا۔ </p>
+			<br>
+			<button onclick="punjabitextf()" class="punjabib2"> Sample Punjabi Sentence</button>   <p id="punjabitext" hidden="true">ماہرین لسانیات نے دنیا کی زبانوں کو نو خاندانوں میں تقسیم کیا ہے ان میں انڈو یورپین سب سے بڑا خاندان ہے جس میں یورپ اور ایشیا  کی مشہور زبانیں مثلاً سنسکرت، لاطینی ،فارسی، انگریزی، جرمن وغیرہ شامل ہیں۔ پنجابی خالص ہند آریائی شاخ سے تعلق رکھتی ہے یا اس میں دوسرے خاندانوں کے اجزا بھی ملتے ہیں ۔جب تک کسی ملک کی تاریخ پیش نظر نہ ہو، یہ جائزہ لینا محال ہے۔ رگ وید کے مطالعہ سے پتہ چلتا ہے کہ آریاؤں کی آمد سے قبل سپت سندھوُ پاکستان میں کچھ اور قومیں آباد تھیں ، جنکے لئے ویدوں میں داس، اشورا، نشادا، پشاچہ اور راکھشش وغیرہ کے الفاظ استعمال کئے گئے ہیں۔ یہ بھی ہمیں بتایا گیا ہے کہ وہ عجیب زبان بولتے تھے۔ انکے رسم و رواج آریوں سے قطعا  مختلف تھے۔ وہ قربانی نہیں دیتے تھے اور نہ دیوتاؤں کی پرستش ہی کرتے تھے ۔</p>
+			<br>
+			<button onclick="hinditextf()" class="hindib3"> Sample Hindi Sentence</button>   <p id="hinditext" hidden="true"> दिल्ली पुलिस जांच के लिए बिभव को मुंबई लेकर गई थीदिल्ली पुलिस PA बिभव कुमार को लेकर iPhone का डेटा रिकवर करने के लिए मुंबई भी लेकर गई थी। दरअसल, विभव ने पूछताछ के दौरान पुलिस को बताया था कि उन्होंने अपना फोन मुंबई में फॉर्मेट कर दिया था। इसके बाद से ही पुलिस इस मामले में बिभव के मोबाइल डेटा को रिट्रीव करने की कोशिश में लगी है, क्योंकि पुलिस को उम्मीद है कि मोबाइल का डेटा मिलने से इस </p>
+			<br>
+			<button onclick="mycall()">Recognize</button>
+		</div>
+<!--		<div class="result" id="result">
+            <h2>Output:</h2>
             <pre id="resultText"></pre>
-        </div>
-    </div>
 
-    <script>
-        async function classifyText() {
-            const text = document.getElementById('inputText').value;
-            const response = await fetch('https://cuddly-space-doodle-rpqw95jqp7pcwprx-5000.app.github.dev/classify', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ text })
-            });
-            const result = await response.json();
-            document.getElementById('resultText').textContent = JSON.stringify(result, null, 2);
-        }
-    </script>
+        </div> -->
+    </div>
+				<h3 class ="styled-h3">Entity Recognition Results</h3>
+			<table id="entityTable">
+				<thead>
+					<tr>
+						<th>Entity Group</th>
+						<th>Score</th>
+						<th>Word</th>
+						<th>Start</th>
+						<th>End</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Rows will be inserted here by JavaScript -->
+				</tbody>
+			</table>
+	<footer>
+	<center> &copy; All Rights Reserved 2024 (Dept. of Computer Science, CUI Lahore)
+	</footer>
+    
+<script src="sample.js"></script>
+
 </body>
 </html>
